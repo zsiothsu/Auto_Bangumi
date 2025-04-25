@@ -19,6 +19,7 @@ class TorrentManager(Database):
 
     def delete_torrents(self, data: Bangumi, client: DownloadClient):
         hash_list = self.__match_torrents_list(data)
+        self.torrent.remove_by_bangumi(data)
         if hash_list:
             client.delete_torrent(hash_list)
             logger.info(f"Delete rule and torrents for {data.official_title}")

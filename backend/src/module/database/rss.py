@@ -23,6 +23,7 @@ class RSSDatabase:
             self.session.add(data)
             self.session.commit()
             self.session.refresh(data)
+            self.enable(data.id)
             return True
 
     def add_all(self, data: list[RSSItem]):

@@ -1,8 +1,9 @@
 import logging
 
-from sqlmodel import Session, select
+from sqlmodel import Session, and_, delete, select
 
 from module.models import Torrent
+from module.models import Bangumi
 
 logger = logging.getLogger(__name__)
 
@@ -55,3 +56,13 @@ class TorrentDatabase:
             if torrent.url not in old_urls:
                 new_torrents.append(torrent)
         return new_torrents
+
+    def remove_by_bangumi(self, bangmumi: Bangumi):
+        condition = delete(Torrent).where(Torrent.bangumi_id == bangmumi.id)
+        try:
+            self.session.exec(condition)
+            self.session.commit()
+            return True
+        except Exception as e:
+            logger.error(f"Delete RSS Item failed. Because: {e}")
+            return False
